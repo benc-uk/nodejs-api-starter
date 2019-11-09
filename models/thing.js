@@ -1,6 +1,13 @@
 const mongoose = require ('mongoose');
 
+//
+// Demo example Thing model
+//
+
+const SCHEMA_NAME = 'Thing';
+
 class Thing {
+  // Set up the Mongoose schema, see https://mongoosejs.com/docs/guide.html
   initSchema() {
     const thingSchema = new mongoose.Schema({
       name:     { type: String, required: true },
@@ -9,33 +16,26 @@ class Thing {
       birthday: { type: Date, required: false },
     });
     
+    // Middleware is optional, it looks kinda like this, see https://mongoosejs.com/docs/middleware.html
     thingSchema.pre('save', function(next) {
         var thing = this;
-        // Additional validation code here
+        // Additional validation/mutation code here as needed
         next();
       }
     );
 
-    mongoose.model("things", thingSchema);
+    // Create the mongoose model from schema
+    mongoose.model(SCHEMA_NAME, thingSchema);
   }
 
+  // Return an instance of Thing model
   getInstance() {
     // Ensure model schema is initialized only once
-    if(!mongoose.modelNames().includes("things"))
+    if(!mongoose.modelNames().includes(SCHEMA_NAME))
       this.initSchema();
 
-    return mongoose.model("things");
+    return mongoose.model(SCHEMA_NAME);
   }
-}
-
-function makeId(len) {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (var i = 0; i < len; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
 }
 
 module.exports = Thing;

@@ -1,20 +1,18 @@
 const mongoose = require('mongoose');
 
-const DB_NAME = "foo";
+
 
 class Connection {
-  constructor(mongoUrl) {
+  constructor(mongoUrl, connectTimeout) {
     console.log(`### Connecting to MongoDB: ${mongoUrl}`);
-    //mongoose.Promise = global.Promise;
     
     const options = {
-      promiseLibrary: global.Promise,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      dbName: DB_NAME
+      serverSelectionTimeoutMS: connectTimeout
     }
 
-    return mongoose.connect(mongoUrl, options);
+    return mongoose.connect(mongoUrl, options)
   }
 }
 
