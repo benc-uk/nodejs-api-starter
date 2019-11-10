@@ -1,4 +1,5 @@
 var MongoQS = require('mongo-querystring');
+var querystring = require('querystring');
 
 // Error messages
 const MSG_UPDATE_ERR = 'Update failed, no result from updateOne';
@@ -46,19 +47,22 @@ class Service {
   // See readme.md for details
   async query(queryParams) {
     try {      
-      var qs = new MongoQS();
-      let { _limit, _skip } = queryParams;
-      delete queryParams._limit;
-      delete queryParams._skip;
-
-      var query = qs.parse(queryParams);
+      var mongoqQS = new MongoQS();
+      let { limit, skip, filter } = queryParams;
       
-      let item = await this.model.find(query)
-      .limit(parseInt(_limit) || 0)
-      .skip(parseInt(_skip) || 0);
+      // Filter is string, e.g foo=bar, but we need an object of key-val pairs
+      let filterQuery = querystring.parse(filter);
+      // Now we can pass it to mongo-querystring
+      var mongoQuery = mongoqQS.parse(filterQuery);
 
-      if(item)
-        return item;
+      console.log(`### Querying collection: '${this.model.modelName.toLowerCase()}' with ${JSON.stringify(mongoQuery)} based on filter: ${filter}`);
+      
+      let items = await this.model.find(mongoQuery)
+      .limit(parseInt(limit) || 0)
+      .skip(parseInt(skip) || 0);
+      
+      if(items)
+        return items;
       else 
         return new Error(MSG_NO_RESULT);
     } catch (error) {      

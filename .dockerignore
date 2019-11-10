@@ -5,8 +5,12 @@ docker-compose*
 .dockerignore
 .git
 .gitignore
-README.md
+*.md
 LICENSE
 .vscode
 .env
 azure-pipelines.yml
+etc
+coverage
+mochawesome-report
+.nyc_output

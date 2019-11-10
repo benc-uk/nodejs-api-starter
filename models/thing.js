@@ -1,19 +1,28 @@
 const mongoose = require ('mongoose');
 
-//
-// Demo example Thing model
-//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// ! PLACEHOLDER CODE - REMOVE / REPLACE THIS !
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 const SCHEMA_NAME = 'Thing';
 
+// The following comment block is used by express-swagger-generator
+// Remove as required, see https://github.com/pgroot/express-swagger-generator
+/**
+ * @typedef Thing
+ * @property {string} name.required - Name of this thing
+ * @property {number} count         - Number of things 
+ * @property {string} created       - Created date, RFC 3339 format
+ * @property {enum}   cheese        - A type of cheese - eg: cheddar,edam,brie,mozzarella
+ */
 class Thing {
   // Set up the Mongoose schema, see https://mongoosejs.com/docs/guide.html
   initSchema() {
     const thingSchema = new mongoose.Schema({
       name:     { type: String, required: true },
-      age:      { type: Number },
+      count:    { type: Number },
       cheese:   { type: String, required: false, enum: ['cheddar', 'edam', 'brie', 'mozzarella'] },
-      birthday: { type: Date, required: false },
+      created:  { type: Date, required: false },
     });
     
     // Middleware is optional, it looks kinda like this, see https://mongoosejs.com/docs/middleware.html

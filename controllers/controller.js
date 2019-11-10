@@ -1,16 +1,22 @@
-
+//
+// Abstract base controller class, all HTTP interaction is here
+// Actual concrete services should extend this
+//
 class Controller {
 
+  // Controller needs a service
   constructor(service) {
     this.service = service;
 
-    // We must use bind here, as this will be not what we expect when the route handler is invoked
+    // We must use bind here, as `this` will be not what we expect when the route handler is invoked
+    // Don't ask, just live with it
     this.insert = this.post.bind(this);
     this.get = this.get.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
   }
 
+  // POST request for creates
   async post(req, res) {
     try {      
       let resp = await this.service.insert(req.body);
@@ -38,6 +44,7 @@ class Controller {
     }
   }
 
+  // PUT to handle updates
   async update(req, res) {
     try {
       let doc = req.body
@@ -51,6 +58,7 @@ class Controller {
     }
   }
 
+  // DELETE to handle removal
   async delete(req, res) {
     try {
       let resp = await this.service.delete(req.params.id);
@@ -62,16 +70,30 @@ class Controller {
     }
   }
 
+  //
+  // Private util function that all good HTTP responses pass through
+  //
   _sendData(res, data, code = 200) {
     res.type('application/json');
+
+    // Add telemetry / logging here
+
     res.status(code).send(data);
   }
 
-  _sendError(res, err, title = 'error') {    
-    console.log(`### Error with API ${err.toString()}`);    
+  //
+  // Private util function that all error HTTP responses pass through
+  //
+  _sendError(res, err, title = 'error', code = 500) {    
+    console.log(`### Error with API ${err.toString()}`); 
+
+    // Some attempt to get calling function in error   
     let source = ((new Error().stack).split("at ")[2]).split(" ")[0]
 
-    let statusCode = 500;
+    // Default status
+    let statusCode = code;
+
+    // Logic to set HTTP status codes, it's not perfect 
     if(err.toString().toLowerCase().includes("no matching docs")) {
       statusCode = 404;
     }
@@ -80,7 +102,7 @@ class Controller {
       title = 'validation-error'
     }
 
-    // Problem Details object as per https://tools.ietf.org/html/rfc7807
+    // Problem Details object as per standard https://tools.ietf.org/html/rfc7807
     let problemDetails = {
       error: true,
       title: title,
@@ -89,8 +111,12 @@ class Controller {
       source: source
     };
 
+    // Add telemetry / logging here
+
     res.status(statusCode).send(problemDetails);
-  }  
+  }    
 }
+
+
 
 module.exports = Controller;

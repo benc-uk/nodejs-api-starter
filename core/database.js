@@ -1,19 +1,24 @@
 const mongoose = require('mongoose');
 
-
-
-class Connection {
-  constructor(mongoUrl, connectTimeout) {
+//
+// Creates connection to MongoDB
+//
+class DatabaseConnection {
+  // mongoUrl - is a standard MongoDB connection string
+  // connectTimeout - Sets initial connection timeout in millisecs
+  constructor(mongoUrl, connectTimeout = 30000) {
     console.log(`### Connecting to MongoDB: ${mongoUrl}`);
     
     const options = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: connectTimeout
+      // Sets how long to try establishing initial server connection. Undocumented! 
+      serverSelectionTimeoutMS: connectTimeout 
     }
 
+    // Note, return the *promise* from .connect()
     return mongoose.connect(mongoUrl, options)
   }
 }
 
-module.exports = Connection;
+module.exports = DatabaseConnection;
