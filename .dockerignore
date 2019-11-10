@@ -8,9 +8,11 @@ docker-compose*
 *.md
 LICENSE
 .vscode
-.env
+.env*
 azure-pipelines.yml
+
 etc
 coverage
 mochawesome-report
 .nyc_output
+test
