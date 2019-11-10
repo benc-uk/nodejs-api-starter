@@ -15,6 +15,7 @@ describe('Thing API', () => {
     request(app)
       .post('/api/things')
       .send({name: 'thing-1', count: 4})
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('_id')
@@ -29,6 +30,7 @@ describe('Thing API', () => {
     request(app)
       .post('/api/things')
       .send({name: 'thing-2', count: 8})
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('name').equals('thing-2')
@@ -41,6 +43,7 @@ describe('Thing API', () => {
     request(app)
       .post('/api/things')
       .send({blah: 'yes'})
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('error').equals(true)
@@ -51,6 +54,7 @@ describe('Thing API', () => {
   it('returns all things', (done) => {
     request(app)
       .get('/api/things')
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('array')
         expect(res.body).to.have.lengthOf(2)
@@ -58,9 +62,10 @@ describe('Thing API', () => {
       .expect(200, done);
   });
 
-  it('returns filtered things, where count > 5', (done) => {
+  it('returns some things, where count > 5', (done) => {
     request(app)
       .get('/api/things?filter=count=>5')
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('array').an
         expect(res.body).to.have.lengthOf(1)
@@ -73,15 +78,17 @@ describe('Thing API', () => {
     request(app)
       .put(`/api/things/${thing1Id}`)
       .send({count: 200})
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
       })
       .expect(200, done);
   });    
 
-  it('fetch a missing thing', (done) => {
+  it('try to fetch a non-existent thing', (done) => {
     request(app)
       .get(`/api/things/5dc82f093ab8a2ac4e727cf9`)
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('error').equals(true)
@@ -92,6 +99,7 @@ describe('Thing API', () => {
   it('fetch a thing by id', (done) => {
     request(app)
       .get(`/api/things/${thing1Id}`)
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('count').equals(200)
@@ -102,6 +110,7 @@ describe('Thing API', () => {
   it('delete a thing by id', (done) => {
     request(app)
       .delete(`/api/things/${thing1Id}`)
+      .expect('Content-Type', /json/)
       .expect(function(res) {
         expect(res.body).to.be.an.an('object')
         expect(res.body).to.have.property('message')

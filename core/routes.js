@@ -11,12 +11,7 @@ module.exports = (app) => {
   const thingController = new ThingController(new ThingService());
   // Health controller has no model
   const healthController = new HealthController(null);
-
-  module.exports.controllers = {
-    thingController: thingController,
-    healthController: healthController
-  }
-
+  
   //
   // Change routes for different models as you see fit
   //
