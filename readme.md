@@ -73,7 +73,7 @@ In place of `MONGO_CONNSTR` the variables `MONGO_CONNECTION` or `MONGO_URL` can 
 
  
 # Usage and 'Thing' Placeholder
-The template comes with a 'thing' entity as a placeholder and example for adding your own models, entities and APIs. 
+The template comes with a 'thing' entity which simply serves as a placeholder and example for adding your own models, entities and APIs. 
 
 To start using the template replicate the code in these files:
 - `models/thing.js`
