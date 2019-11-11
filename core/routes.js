@@ -17,7 +17,7 @@ module.exports = (app) => {
   //
 
   // POST - Create a new thing
-  app.post('/api/things',       thingController.insert);
+  app.post('/api/things',       thingController.create);
 
   // GET - a single thing
   app.get('/api/things/:id',    thingController.get);
@@ -27,7 +27,7 @@ module.exports = (app) => {
 
   // PUT - Update/replace a single thing
   app.put('/api/things/:id',    thingController.update);
-  
+
   // DELETE - Remove a thing
   app.delete('/api/things/:id', thingController.delete);
 

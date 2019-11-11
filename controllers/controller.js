@@ -10,7 +10,7 @@ class Controller {
 
     // We must use bind here, as `this` will be not what we expect when the route handler is invoked
     // Don't ask, just live with it
-    this.insert = this.post.bind(this);
+    this.create = this.create.bind(this);
     this.get = this.get.bind(this);
     this.query = this.query.bind(this);
     this.update = this.update.bind(this);
@@ -18,7 +18,7 @@ class Controller {
   }
 
   // POST request for creates
-  async post(req, res) {
+  async create(req, res) {
     try {      
       let resp = await this.service.insert(req.body);
       if(resp instanceof Error) throw resp;
