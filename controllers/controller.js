@@ -12,6 +12,7 @@ class Controller {
     // Don't ask, just live with it
     this.insert = this.post.bind(this);
     this.get = this.get.bind(this);
+    this.query = this.query.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
   }
@@ -28,14 +29,22 @@ class Controller {
     }
   }
 
+  // GET single item by id
   async get(req, res) {
     try {
-      let resp;
-      if(req.params.id)
-        resp = await this.service.fetchOne(req.params.id);
-      else 
-        resp = await this.service.query(req.query);
+      let resp = await this.service.fetchOne(req.params.id);
+      if(resp instanceof Error) throw resp;
 
+      this._sendData(res, resp);
+    } catch(err) {
+      this._sendError(res, err);
+    }
+  }
+
+  // GET search/find multiple items
+  async query(req, res) {
+    try {
+      let resp = await this.service.query(req.query);
       if(resp instanceof Error) throw resp;
 
       this._sendData(res, resp);
