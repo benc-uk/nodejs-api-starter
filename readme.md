@@ -33,7 +33,7 @@ Three query URL parameters are supported, all are optional:
 - `limit` - Limit number of results returned
 - `skip` - Skip a number of results, use for pagination
 
-Note. omitting all params (i.e. no query string at all) results in documents of the given model being returned from the DB
+Note. Omitting all params (i.e. no query string at all) results in all documents of the given model being returned from the DB
 
 URL examples:
 - `/api/things?cheese=cheddar`
@@ -83,7 +83,7 @@ To start using the template replicate the code in these files:
 
 Copy, rename and edit these files to new names and change classes as required.  
 
-### Example
+### Example - adding 'Foo' entity and API
 
 A new Foo **Controller** in `controllers/foo-controller.js`
 ```js
@@ -94,8 +94,33 @@ class FooController extends Controller {
 }
 ```
 
+Create a new Foo model in `models/foo.js`, eg.
+
+```js
+const mongoose = require ('mongoose');
+
+class Foo {
+  initSchema() {
+    mongoose.model('foo', new mongoose.Schema({
+      name: { type: String, required: true },
+    });
+  }
+
+  // Return an instance of Thing model
+  getInstance() {
+    if(!mongoose.modelNames().includes('foo'))
+      this.initSchema();
+
+    return mongoose.model('foo');
+  }
+}
+
+module.exports = Foo;
+```
+
 A new Foo **Service** in `services/foo-service.js`
 ```js
+const Foo = require('../models/foo');
 class FooService extends Service {
   constructor() {
     const foo = new Foo().getInstance();
@@ -105,7 +130,10 @@ class FooService extends Service {
 ```
 
 In `core/routes.js` add an instance of your new controller, e.g.
+
 ```js
+const FooController = require('../controllers/foo-controller');
+const FooService = require('../services/foo-service');
 const fooController = new FooController(new FooService());
 ```
 

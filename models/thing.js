@@ -18,7 +18,7 @@ const SCHEMA_NAME = 'Thing';
 class Thing {
   // Set up the Mongoose schema, see https://mongoosejs.com/docs/guide.html
   initSchema() {
-    const thingSchema = new mongoose.Schema({
+    const schema = new mongoose.Schema({
       name:     { type: String, required: true },
       count:    { type: Number },
       cheese:   { type: String, required: false, enum: ['cheddar', 'edam', 'brie', 'mozzarella'] },
@@ -26,7 +26,7 @@ class Thing {
     });
     
     // Middleware is optional, it looks kinda like this, see https://mongoosejs.com/docs/middleware.html
-    thingSchema.pre('save', function(next) {
+    schema.pre('save', function(next) {
         var thing = this;
         // Additional validation/mutation code here as needed
         next();
@@ -34,7 +34,7 @@ class Thing {
     );
 
     // Create the mongoose model from schema
-    mongoose.model(SCHEMA_NAME, thingSchema);
+    mongoose.model(SCHEMA_NAME, schema);
   }
 
   // Return an instance of Thing model
